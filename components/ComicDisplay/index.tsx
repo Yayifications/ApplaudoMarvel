@@ -1,7 +1,9 @@
 import LoadComic from "./LoadComic"
 
-export default () =>{
+const index = () =>{
     return (
         <LoadComic />
     )
 }
+
+export default index;

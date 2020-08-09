@@ -1,7 +1,9 @@
 import LoadCharacter from "./LoadCharacter"
 
-export default () => {
+const index = () => {
     return (
         <LoadCharacter />
     )
 }
+
+export default index;

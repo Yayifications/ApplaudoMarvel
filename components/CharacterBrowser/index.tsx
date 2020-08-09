@@ -1,8 +1,10 @@
 import CharacterBrowser from "./CharacterBrowser"
 
-export default () => {
+const index = () => {
     return(
         <CharacterBrowser />
     )
    
 }
+
+export default index;

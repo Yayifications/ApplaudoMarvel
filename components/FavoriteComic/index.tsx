@@ -1,7 +1,9 @@
 import FavoriteComics from "./FavoriteComic"
 
-export default () =>{
+const index = () =>{
     return(
         <FavoriteComics />
     )
 }
+
+export default index;

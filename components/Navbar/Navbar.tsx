@@ -8,14 +8,16 @@ const NavDiv = styled("div")`
     display:flex;
     margin:0;
     padding-left:20px;
-    background: #fff;
+    background-color: #cc1800;
+    color: white;
+    font-size: 10pt;
+    font-weight: bolder;
     align-items: center;
-    font-family: helvetica;
+    font-family: 'Oswald', sans-serif;
     justify-content: center;
-    color: #454545;
-    font-size: 10px;
-    border-top: 1px solid #454545;
-    border-bottom: 1px solid #454545;
+    -webkit-box-shadow: 0px 4px 17px -6px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 4px 17px -6px rgba(0,0,0,0.75);
+    box-shadow: 0px 4px 17px -6px rgba(0,0,0,0.75);
   
     .buttonContainer{
         margin-left : 22%;
@@ -25,12 +27,12 @@ const NavDiv = styled("div")`
 
     .button{
         margin:0 20px;
-        color: #454545;
+        color: white;
         cursor: pointer;
     }
 
     .button: hover{
-        color: #f44;
+        color: #780000;
     }
 
     

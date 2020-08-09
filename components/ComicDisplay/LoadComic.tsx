@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Layout from '../../components/Layout/Layout';
-import MarvelURL from '../../variables/marvelUrl';
+import MarvelURL from '../../utils/marvelUrl';
 import axios from 'axios';
 import ComicDisplay from './ComicDisplay';
 
@@ -15,7 +15,7 @@ const LoadComic : React.FC = () => {
         axios.get(marvel[0])
             .then( res => {
                 const data = res.data.data;
-                console.log(data.results);
+                //console.log(data.results);
                 setComic([...data.results]);
             })
             .catch( error => {
