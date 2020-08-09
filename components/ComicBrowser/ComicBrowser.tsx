@@ -6,22 +6,9 @@ import InfiniteScroll from 'react-infinite-scroller';
 import SearchFilter from "../SearchFilter/SearchFilter";
 import FavoriteComic from "../FavoriteComic";
 import styled from 'styled-components';
+import BrowseContainer from '../../styles/styles';
 
-const BrowseContainer = styled('div')`
-    display:flex;
-    justify-content:center;
-    align-items: flex-start;
-    .scroll{
-        order:1;
-        width: 50%
-    }
 
-    .filter{
-       margin-left:20px;
-       order:2; 
-    }
-
-`;
 
 const defaultParams = {
     limit: 5,
