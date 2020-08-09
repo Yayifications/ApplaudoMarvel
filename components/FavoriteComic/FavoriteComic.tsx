@@ -33,7 +33,7 @@ const FavoriteComics: React.FC = () => {
             data[v] = o[v];
         })
         setFavorites([...data]);
-    })
+    },[])
 
     return (
         <FavoritesContainer>

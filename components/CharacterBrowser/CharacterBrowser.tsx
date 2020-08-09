@@ -7,8 +7,24 @@ import SearchFilter from "../SearchFilter/SearchFilter";
 import FavoriteCharacters from "../FavoriteCharacters";
 import styled from 'styled-components';
 
+const BrowseContainer = styled('div')`
+    display:flex;
+    justify-content:center;
+    align-items: flex-start;
+    .scroll{
+        order:1;
+        width: 50%
+    }
+
+    .filter{
+        margin-left:20px;
+       order:2; 
+    }
+
+`;
+
 const defaultParams = {
-    limit: 5,
+    limit: 10,
     filterType: "",
     filter: "",
 }
@@ -24,10 +40,23 @@ const CharacterBrowser: React.FC = () => {
     const [offset, setOffset] = useState(0);
     const [params, setParams] = useState({ ...defaultParams });
     const [loading, setLoading] = useState(false);
-    
+
+
+
     const loadData = async (band?: boolean) => {
         setLoading(false);
-        const marvel = MarvelURL(`characters?orderBy=name&limit=${params.limit}&offset=${offset * params.limit}${filterTypes[params.filterType] + params.filter}`);
+        let marvel = [''];
+
+        if (band) {
+
+            marvel = MarvelURL(`characters?orderBy=name&limit=${params.limit}&offset=${offset * params.limit}${filterTypes[params.filterType] + params.filter}`);
+            setOffset(offset + 1);
+
+        } else {
+
+            marvel = MarvelURL(`characters?orderBy=name&limit=${params.limit}&offset=0${filterTypes[params.filterType] + params.filter}`);
+            setOffset(1);
+        }
 
         axios.get(marvel[0])
             .then(res => {
@@ -35,11 +64,11 @@ const CharacterBrowser: React.FC = () => {
 
                 if (data.results.length > 0) {
                     if (band) {
-                        setOffset(offset + 1);
-                        setCharacters([...characters,...data.results]);
+
+                        setCharacters([...characters, ...data.results]);
 
                     } else {
-                        setOffset(0);
+
                         setCharacters([...data.results]);
 
                     }
@@ -50,16 +79,22 @@ const CharacterBrowser: React.FC = () => {
             .catch(error => {
                 console.log(error);
             }
-
-        )
+            )
     }
 
     const onFilterChange = e => {
-        setParams({
-            ...defaultParams,
-            filter: e.target.value,
-            filterType: params.filterType
-        })
+        if(params.filterType != ""){
+            setParams({
+                ...defaultParams,
+                filter: e.target.value,
+                filterType: params.filterType
+            })
+        }else{
+            setParams({
+                ...defaultParams
+            })
+        }
+        
     }
 
     const onFilterTypeChange = e => {
@@ -70,7 +105,6 @@ const CharacterBrowser: React.FC = () => {
     }
 
     const onFilter = () => {
-        setOffset(0);
         setLoading(false);
         setCharacters([]);
         loadData(false);
@@ -96,28 +130,32 @@ const CharacterBrowser: React.FC = () => {
     return (
         <div>
             <FavoriteCharacters />
-            <div>
-                <div>
-                    <input onChange={onFilterChange} value={params.filter} />
-                </div>
+
+            <BrowseContainer>
                 <SearchFilter
                     onClick={onFilterTypeChange}
                     types={Object.keys(filterTypes)}
+                    value={params.filter}
                     selected={Object.keys(filterTypes).indexOf(params.filterType)}
+                    onFilterChange={onFilterChange}
+                    onFilter={onFilter}
                 />
-                <button onClick={onFilter}>Filter</button>
-            </div>
-            {items.length > 0 ?
-                <InfiniteScroll
-                    pageStart={0}
-                    loadMore={() => {
-                        loadData(true)
-                    }}
-                    hasMore={loading}
-                    threshold={800}
-                    loader={<div className="loader" key={0}>Loading ...</div>}>
-                    {items}
-                </InfiniteScroll> : <p>No Search Results Found</p>}
+
+                {items.length > 0 ?
+                    <InfiniteScroll
+                        className="scroll"
+                        pageStart={0}
+                        loadMore={() => {
+                            loadData(true)
+                        }}
+                        hasMore={loading}
+                        threshold={800}
+                    >
+                        {items}
+                    </InfiniteScroll> : <p>No Search Results Found</p>}
+            </BrowseContainer>
+
+
         </div>
 
 

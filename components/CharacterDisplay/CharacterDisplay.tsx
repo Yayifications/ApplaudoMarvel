@@ -1,6 +1,26 @@
 import { useEffect, useState } from 'react';
 import { GiBrokenHeart, GiHearts } from 'react-icons/gi';
 import dataCharacters from '../../localstorage/dataCharacters';
+import styled from 'styled-components';
+
+const CharacterInfoDisplay = styled("div")`
+    display:flex;
+    align-items:center;
+    flex-direction: column;
+    margin: 10px 10%;
+    background: #fff;
+    border: 1px solid #444;
+    text-align: center;
+    div{
+        width:100%;
+        margin: 10px 0;
+        border-bottom: 1px solid #444;
+    }
+    ul{
+        list-style: none;
+    }
+`
+    ;
 
 interface Character{
     id : string,
@@ -34,7 +54,7 @@ const CharacterDisplay : React.FC<Character> = ({id,name , description, imgURL, 
 
     return (
      
-            <div>
+            <CharacterInfoDisplay>
                    {band ?
                 <div onClick={()=>{modificarFavorito(false,id,imgURL)}}>
                     <GiHearts />
@@ -48,20 +68,22 @@ const CharacterDisplay : React.FC<Character> = ({id,name , description, imgURL, 
                     <img src={imgURL} alt="" />
                 </div>
                 <div>
+                    <span>Comics</span>
                     <ul>
-                        {comics.map((v,k) =>(
+                        {comics.length > 0?comics.map((v,k) =>(
                             <li key={k}>{v}</li>
-                        ))}
+                        )):<p>There are no comics associated with this Character.</p>}
                     </ul>
                 </div>
                 <div>
+                    <span>Stories</span>
                     <ul>
-                        {stories.map((v,k) =>(
+                        {stories.length > 0?stories.map((v,k) =>(
                             <li key={k}>{v}</li>
-                        ))}
+                        )):<p>There are no stories associated with this Character.</p>}
                     </ul>
                 </div>
-            </div>
+            </CharacterInfoDisplay>
       
     );
 }

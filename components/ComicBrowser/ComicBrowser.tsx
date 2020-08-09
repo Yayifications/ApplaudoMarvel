@@ -7,6 +7,22 @@ import SearchFilter from "../SearchFilter/SearchFilter";
 import FavoriteComic from "../FavoriteComic";
 import styled from 'styled-components';
 
+const BrowseContainer = styled('div')`
+    display:flex;
+    justify-content:center;
+    align-items: flex-start;
+    .scroll{
+        order:1;
+        width: 50%
+    }
+
+    .filter{
+       margin-left:20px;
+       order:2; 
+    }
+
+`;
+
 const defaultParams = {
     limit: 5,
     filterType: "",
@@ -27,17 +43,25 @@ const ComicBrowser: React.FC = () => {
 
     const loadData = async (band?: Boolean) => {
         setLoading(false);
-        const marvel = MarvelURL(`comics?orderBy=issueNumber&limit=${params.limit}&offset=${offset * params.limit}${filterTypes[params.filterType] + params.filter}`);
+        let marvel = [''];
+        if (band) {
+            marvel = MarvelURL(`comics?orderBy=issueNumber&limit=${params.limit}&offset=${offset * params.limit}${filterTypes[params.filterType] + params.filter}`);
+            setOffset(offset + 1);
+        } else {
+            marvel = MarvelURL(`comics?orderBy=issueNumber&limit=${params.limit}&offset=0${filterTypes[params.filterType] + params.filter}`);
+            setOffset(1);
+        }
+
         axios.get(marvel[0])
             .then(res => {
                 const data = res.data.data;
 
                 if (data.results.length > 0) {
                     if (band) {
-                        setOffset(offset + 1);
+
                         setComics([...comics, ...data.results]);
                     } else {
-                        setOffset(0);
+
                         setComics([...data.results]);
                     }
 
@@ -48,7 +72,7 @@ const ComicBrowser: React.FC = () => {
                 console.log(error);
             }
 
-        )
+            )
     }
 
     const onFilterChange = e => {
@@ -93,28 +117,32 @@ const ComicBrowser: React.FC = () => {
     return (
         <div>
             <FavoriteComic />
-            <div>
-                <div>
-                    <input onChange={onFilterChange} value={params.filter} />
-                </div>
+
+            <BrowseContainer>
                 <SearchFilter
                     onClick={onFilterTypeChange}
                     types={Object.keys(filterTypes)}
+                    value={params.filter}
                     selected={Object.keys(filterTypes).indexOf(params.filterType)}
+                    onFilterChange={onFilterChange}
+                    onFilter={onFilter}
                 />
-                <button onClick={onFilter}>Filter</button>
-            </div>
-            {items.length > 0 ?
-                <InfiniteScroll
-                    pageStart={0}
-                    loadMore={() => {
-                        loadData(true)
-                    }}
-                    hasMore={loading}
-                    threshold={800}
-                    loader={<div className="loader" key={0}>Loading ...</div>}>
-                    {items}
-                </InfiniteScroll> : <p>No Search Results Found</p>}
+
+                {items.length > 0 ?
+                    <InfiniteScroll
+                        className="scroll"
+                        pageStart={0}
+                        loadMore={() => {
+                            loadData(true)
+                        }}
+                        hasMore={loading}
+                        threshold={800}
+                        loader={<div className="loader" key={0}>Loading ...</div>}>
+                        {items}
+                    </InfiniteScroll> : <p>No Search Results Found</p>}
+            </BrowseContainer>
+
+
 
         </div>
 

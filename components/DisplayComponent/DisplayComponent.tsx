@@ -14,8 +14,9 @@ const Container = styled("div")`
     flex-direction: column;
     border: 1px solid #444;
     background: #fff;
-    margin: 30px 10%;
     cursor:pointer;
+  
+    margin-bottom: 40px;
 
     div{
         width: 100%;
@@ -25,7 +26,7 @@ const Container = styled("div")`
     img{
         margin: 0 0;
         padding: 10px 0;
-        max-width: 20%;
+        max-width: 45%;
         height: auto;
     }
 
